@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Anushka, ek baat</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg1:#f4e9ee;--bg2:#e4cfdc;--ink:#3b1a2e;--soft:#7a4c63;--card:rgba(255,255,255,.6);--line:#c58aa4;
+  --serif:'Fraunces',Georgia,serif;--sans:'DM Sans',system-ui,-apple-system,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#241528;--bg2:#3a1f40;--ink:#fbe9f0;--soft:#d9a9c0;--card:rgba(255,255,255,.08);--line:#d58bab}}
+:root[data-theme="dark"]{--bg1:#241528;--bg2:#3a1f40;--ink:#fbe9f0;--soft:#d9a9c0;--card:rgba(255,255,255,.08);--line:#d58bab}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;display:flex;background:radial-gradient(120% 90% at 50% 0%,var(--bg2),var(--bg1));background-color:var(--bg1);color:var(--ink);font-family:var(--sans)}
+main{width:100%;max-width:28rem;margin:auto;padding:1.5rem;text-align:center}
+.view[hidden]{display:none}
+h1{font:italic 600 clamp(2.2rem,10vw,3rem)/1.1 var(--serif);margin:0 0 .7rem}
+p{margin:0 0 1.2rem;line-height:1.65;color:var(--soft)}
+.pin{display:flex;gap:.7rem;justify-content:center;margin:1.5rem 0 1rem}
+.pin input{width:3.4rem;height:4.2rem;text-align:center;font:600 1.9rem var(--serif);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:1rem;outline:none}
+.pin input:focus-visible{border-color:var(--ink);box-shadow:0 0 0 4px var(--line)}
+.pin.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.msg{min-height:1.4rem;font-size:.95rem;margin-bottom:1rem}
+button{font:500 1rem var(--sans);color:var(--bg1);background:var(--ink);border:0;border-radius:2rem;padding:.85rem 2rem;cursor:pointer}
+button:focus-visible{outline:3px solid var(--line);outline-offset:3px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:1.2rem;padding:1.5rem 1.3rem;margin-top:1.4rem;text-align:left}
+.note p{color:var(--ink);font:italic 400 1.1rem/1.75 var(--serif)}
+.note p:last-child{margin-bottom:0;font-weight:600}
+#msgview:not([hidden]) .ln{animation:in .9s ease-out both;animation-delay:calc(var(--i) * 1.2s)}
+#msgview .ln{opacity:0}
+@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}#msgview .ln{opacity:1}}
+</style>
+</head>
+<body>
+<main>
+  <section id="lock" class="view">
+    <h1>Sirf tumhare liye</h1>
+    <p>Meri birthday daalo (DDMM).</p>
+    <div class="pin" id="pin">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Pehla digit">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Doosra digit">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Teesra digit">
+      <input inputmode="numeric" maxlength="1" autocomplete="off" aria-label="Chautha digit">
+    </div>
+    <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    <button id="open" type="button">Kholo</button>
+  </section>
+
+  <section id="msgview" class="view" hidden>
+    <h1>Anushka, ek baat</h1>
+    <div class="note">
+      <p class="ln" style="--i:0">Ye main tumhe bina kisi gusse ke likh raha hoon.</p>
+      <p class="ln" style="--i:1">Kuch din se main theek nahi hoon. Dimag shant nahi rehta, aur mujhe darr lagta hai ki tum door ho rahi ho.</p>
+      <p class="ln" style="--i:2">Main ye nahi keh raha ki tum galat ho. Main bas sach bata raha hoon ki mujhe bhi tumhara pyar aur tumhara wqt chahiye.</p>
+      <p class="ln" style="--i:3">Agar mujhse koi galti hui ho, mujhe batao. Main sunna chahta hoon. Chize fix karne mein bas thoda wqt lagta hai.</p>
+      <p class="ln" style="--i:4">Bas ek baar mujhe yakeen dilao ki tum mujhe ignore nahi kar rahi. Aur agar kuch aur baat hai, wo seedha bol do.</p>
+      <p class="ln" style="--i:5">Mere liye ye humari life hai, meri akele ki nahi.</p>
+    </div>
+  </section>
+</main>
+<script>
+(function(){
+  var CODE='0412';
+  var boxes=Array.prototype.slice.call(document.querySelectorAll('#pin input'));
+  var pin=document.getElementById('pin'),msg=document.getElementById('msg');
+  function value(){return boxes.map(function(b){return b.value}).join('')}
+  function check(){
+    if(value().length<4){msg.textContent='Chaaron digit daalo.';return}
+    if(value()===CODE){document.getElementById('lock').hidden=true;document.getElementById('msgview').hidden=false;return}
+    msg.textContent='Galat hai, dobara try karo.';
+    pin.classList.remove('shake');void pin.offsetWidth;pin.classList.add('shake');
+    boxes.forEach(function(b){b.value=''});boxes[0].focus();
+  }
+  boxes.forEach(function(b,i){
+    b.addEventListener('input',function(){
+      b.value=b.value.replace(/\D/g,'').slice(0,1);msg.textContent='';
+      if(b.value&&i<3)boxes[i+1].focus();
+      if(value().length===4)check();
+    });
+    b.addEventListener('keydown',function(e){
+      if(e.key==='Backspace'&&!b.value&&i>0)boxes[i-1].focus();
+      if(e.key==='Enter')check();
+    });
+  });
+  document.getElementById('open').addEventListener('click',check);
+  boxes[0].focus();
+})();
+</script>
+</body>
+</html>
